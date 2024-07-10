@@ -1,11 +1,10 @@
-package net.azureaaron.hmapi.network.packet.v1.s2c;
+package net.azureaaron.hmapi.network.packet.s2c;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import net.azureaaron.hmapi.data.server.Environment;
-import net.azureaaron.hmapi.network.packet.s2c.HelloS2CPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.Bootstrap;
 import net.minecraft.SharedConstants;

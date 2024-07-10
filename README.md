@@ -1,5 +1,5 @@
 # HM API
-HM API is a library that fully implements Hypixel's Mod API on Fabric 1.20.5+, HM API is built with modern Java 21 features in mind as well as providing a flexible, and easy to use interface for developers to work with.
+HM API is a library that fully implements Hypixel's Mod API on Fabric 1.21+, HM API is built with modern Java 21 features in mind as well as providing a flexible, and easy to use interface for developers to work with.
 
 ### Supported Packets:
 - [x] `hypixel:party_info` (v2)
@@ -21,7 +21,7 @@ The `ping` packet is unsupported due to it serving as more of a test for impleme
 ## Usage
 You can import HM API into your project like this:
 
-First, add the following Maven repository to your `build.gradle` file, ensure that it is always at the bottom of the repositories block.
+First, add the following Maven repository to your `build.gradle` file.
 
 ```groovy
 repositories {
@@ -44,7 +44,7 @@ dependencies {
 }
 ```
 
-Once you've imported the library, you can find the methods to send packet's to Hypixel's Mod API in the [`HypixelNetworking`](src/main/java/net/azureaaron/hmapi/network/HypixelNetworking.java) class. In order to listen to packets you'll need to register to the appropriate event inside of the [`PacketEvents`](src/main/java/net/azureaaron/hmapi/events/PacketEvents.java) class.
+Once you've imported the library, you can find the methods to send packet's to Hypixel's Mod API in the [`HypixelNetworking`](src/main/java/net/azureaaron/hmapi/network/HypixelNetworking.java) class. In order to listen to packets you'll need to register to the appropriate event inside of the [`HypixelPacketEvents`](src/main/java/net/azureaaron/hmapi/events/HypixelPacketEvents.java) class.
 
 > [!IMPORTANT]
 > There is an example available [here](src/test/java/net/azureaaron/hmapi/Example.java) with some code to get you started. It's also recommended to read the JavaDocs of these classes to get a sense of how the library works.
@@ -56,3 +56,8 @@ I'll likely hold off on making breaking API changes to the library until a new M
 
 ## Maintaining
 HM API will only be maintained for the latest verions of Fabric API and Minecraft, it will also be kept up to date with any changes made to Hypixel's Mod API (e.g. new packets, deprecations).
+
+## Special Thanks
+- nea89: For assisting in making this implementation fully compatible with other implementations via Mixins.
+- The Skyblocker Team: For providing insight on the design.
+- Hypixel: For creating the Mod API and its library from which this design was referenced.

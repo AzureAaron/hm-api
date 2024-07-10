@@ -7,6 +7,9 @@
 	"authors": [
 		"AzureAaron"
 	],
+	"contributors": [
+		"nea89"
+	],
 	"contact": {
 		"homepage": "https://azureaaron.net/",
 		"sources": "https://github.com/AzureAaron/hm-api"
