@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "hm-api",
+	"version": "${version}",
+	"name": "HM Api",
+	"description": "Library to interact with Hypixel's Mod API.",
+	"authors": [
+		"AzureAaron"
+	],
+	"contact": {
+		"homepage": "https://azureaaron.net/",
+		"sources": "https://github.com/AzureAaron/hm-api"
+	},
+	"license": "Apache-2.0",
+	"icon": "assets/hm-api/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"net.azureaaron.hmapi.HMApi"
+		]
+	},
+	"mixins": [
+		"hm-api.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": ">=0.100.1+1.21"
+	},
+	"custom": {
+		"modmenu": {
+			"badges": [
+				"library"
+			]
+		}
+	}
+}
