@@ -3,7 +3,7 @@
 	"id": "hm-api",
 	"version": "${version}",
 	"name": "HM Api",
-	"description": "Library to interact with Hypixel's Mod API.",
+	"description": "Library for interacting with Hypixel's Mod API.",
 	"authors": [
 		"AzureAaron"
 	],
