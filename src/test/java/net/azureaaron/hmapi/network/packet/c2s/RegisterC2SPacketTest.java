@@ -25,7 +25,7 @@ public class RegisterC2SPacketTest {
 	}
 
 	@Test
-	void testDeserializeByteBuf() {
+	void testSerializeByteBuf() {
 		RegistryByteBuf expected = RegistryByteBuf.makeFactory(DynamicRegistryManager.EMPTY).apply(PacketByteBufs.create());
 		RegistryByteBuf actual = RegistryByteBuf.makeFactory(DynamicRegistryManager.EMPTY).apply(PacketByteBufs.create());
 

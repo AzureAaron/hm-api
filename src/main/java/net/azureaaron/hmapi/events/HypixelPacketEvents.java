@@ -27,8 +27,7 @@ public class HypixelPacketEvents {
 	public static final Event<PacketCallback> PLAYER_INFO = createEvent();
 
 	/**
-	 * Upon logging into the server, Hypixel sends a Hello packet. Its recommended to use this event to register for event-based packets
-	 * such as location updates.
+	 * Upon logging into the server, Hypixel sends a Hello packet.
 	 * 
 	 * The packed passed here will be a {@code HelloS2CPacket} or an {@link ErrorS2CPacket}.
 	 */
