@@ -30,26 +30,24 @@ public class HypixelCustomPayloadCodecs {
 					createType(RegisterC2SPacket.ID, RegisterC2SPacket.PACKET_CODEC))
 			);
 
-	@SuppressWarnings("unchecked")
 	private static final PacketCodec<PacketByteBuf, CustomPayload> S2C_PACKET_CODEC = CustomPayload.createCodec(
 			HypixelPacket.Unknown::createPacketCodec, Lists.newArrayList(
 					createType(PartyInfoS2CPacket.ID, PacketCodecUtils.dispatchHypixel(
 							Util.make(new Int2ObjectOpenHashMap<>(), map -> {
-								map.put(2, PacketCodec.class.cast(PartyInfoS2CPacket.PACKET_CODEC));
+								map.put(2, PartyInfoS2CPacket.PACKET_CODEC);
 							}),
 							ErrorS2CPacket.PACKET_CODEC.apply(PartyInfoS2CPacket.ID))),
 					createType(PlayerInfoS2CPacket.ID, PacketCodecUtils.dispatchHypixel(
-							Util.make(new Int2ObjectOpenHashMap<>(), map -> map.put(1, PacketCodec.class.cast(PlayerInfoS2CPacket.PACKET_CODEC))),
+							Util.make(new Int2ObjectOpenHashMap<>(), map -> map.put(1, PlayerInfoS2CPacket.PACKET_CODEC)),
 							ErrorS2CPacket.PACKET_CODEC.apply(PlayerInfoS2CPacket.ID))),
 					createType(HelloS2CPacket.ID, PacketCodecUtils.dispatchSafely(HelloS2CPacket.PACKET_CODEC, ErrorS2CPacket.PACKET_CODEC.apply(HelloS2CPacket.ID))),
 					createType(LocationUpdateS2CPacket.ID, PacketCodecUtils.dispatchHypixel(
-							Util.make(new Int2ObjectOpenHashMap<>(), map -> map.put(1, PacketCodec.class.cast(LocationUpdateS2CPacket.PACKET_CODEC))),
+							Util.make(new Int2ObjectOpenHashMap<>(), map -> map.put(1, LocationUpdateS2CPacket.PACKET_CODEC)),
 							ErrorS2CPacket.PACKET_CODEC.apply(LocationUpdateS2CPacket.ID))))
 			);
 
 	@SuppressWarnings("unchecked")
-	//T2 is because the HelloS2CPacket's id generic type is HypixelS2CPacket and not the same as the codec
-	private static <B extends PacketByteBuf, T1 extends CustomPayload, T2 extends CustomPayload> CustomPayload.Type<PacketByteBuf, CustomPayload> createType(CustomPayload.Id<T1> id, PacketCodec<B, T2> packetCodec) {
+	private static <B extends PacketByteBuf, T extends CustomPayload> CustomPayload.Type<PacketByteBuf, CustomPayload> createType(CustomPayload.Id<T> id, PacketCodec<B, T> packetCodec) {
 		return new CustomPayload.Type<>(id, PacketCodec.class.cast(packetCodec));
 	}
 

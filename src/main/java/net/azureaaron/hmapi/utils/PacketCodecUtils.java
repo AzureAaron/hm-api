@@ -8,55 +8,49 @@ import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 
 /**
- * Extension class for {@link PacketCodec PacketCodecs}.
+ * Utilities class for {@link PacketCodec PacketCodecs}.
  */
 @ApiStatus.Internal
 public class PacketCodecUtils {
 	private static final Logger LOGGER = LogUtils.getLogger();
 
 	/**
-	 * @param <C> The common interface shared between between all supplied primary packets and the error packet.
-	 * @param <E> The type of the error codec
-	 *
-	 * @return A codec that decodes the {@link RegistryByteBuf} in line with the packet format of Hypixel's Mod API and the requirements of my implementation.
+	 * @return A codec that decodes the {@link PacketByteBuf} in line with the packet format of Hypixel's Mod API and the requirements of my implementation.
 	 */
-	public static <B extends PacketByteBuf, C, E extends C> PacketCodec<B, C> dispatchHypixel(Int2ObjectMap<PacketCodec<B, C>> primaryPacketCodecs, PacketCodec<B, E> errorCodec) {
-		return new PacketCodec<B, C>() {
+	public static <B extends PacketByteBuf> PacketCodec<B, ? extends HypixelS2CPacket> dispatchHypixel(Int2ObjectMap<PacketCodec<B, ? extends HypixelS2CPacket>> primaryPacketCodecs, PacketCodec<B, ? extends HypixelS2CPacket> errorCodec) {
+		return new PacketCodec<B, HypixelS2CPacket>() {
 
-			@SuppressWarnings("unchecked")
 			@Override
-			public C decode(B buf) {
+			public HypixelS2CPacket decode(B buf) {
 				Boolean success = buf.readBoolean();
 				int version = success ? buf.readVarInt() : -1;
 
 				return switch (success) {
-					case Boolean s when s && version == 1 && primaryPacketCodecs.containsKey(version) -> decodeInternal(buf, primaryPacketCodecs.get(version));
-					case Boolean s when s && version == 2 && primaryPacketCodecs.containsKey(version) -> decodeInternal(buf, primaryPacketCodecs.get(version));
+					case Boolean s when s && primaryPacketCodecs != null && primaryPacketCodecs.containsKey(version) -> decodeInternal(buf, primaryPacketCodecs.get(version));
 					case Boolean s when !s -> errorCodec.decode(buf);
 
-					default -> (C) HypixelS2CPacket.NOP;
+					default -> HypixelS2CPacket.NOP;
 				};
 			}
 
-			private C decodeInternal(B buf, PacketCodec<B, C> packetCodec) {
-				C c = packetCodec.decode(buf);
+			private HypixelS2CPacket decodeInternal(B buf, PacketCodec<B, ? extends HypixelS2CPacket> packetCodec) {
+				HypixelS2CPacket packet = packetCodec.decode(buf);
 
 				//There was a bug where Hypixel would send a bunch of extra bytes with a value of 0 so this was a work around to avoid being kicked from the server
 				//for not fully reading the packet
 				//Its also good practice if a breaking change is added
 				readAllBytes(buf, true);
 
-				return c;
+				return packet;
 			}
 
 			//Since this is only used for S2C packets we don't really need to care about what it does
 			//so we will just throw an exception
 			@Override
-			public void encode(B buf, C value) {
+			public void encode(B buf, HypixelS2CPacket value) {
 				throw new UnsupportedOperationException();
 			}
 		};
@@ -78,18 +72,17 @@ public class PacketCodecUtils {
 		};
 	}
 	
-	public static <B extends PacketByteBuf, C, T extends C, E extends C> PacketCodec<B, C> dispatchSafely(PacketCodec<B, T> packetCodec, PacketCodec<B, E> errorCodec) {
-		return new PacketCodec<B, C>() {
+	public static <B extends PacketByteBuf> PacketCodec<B, ? extends HypixelS2CPacket> dispatchSafely(PacketCodec<B, ? extends HypixelS2CPacket> packetCodec, PacketCodec<B, ? extends HypixelS2CPacket> errorCodec) {
+		return new PacketCodec<B, HypixelS2CPacket>() {
 
-			@SuppressWarnings("unchecked")
 			@Override
-			public C decode(B buf) {
+			public HypixelS2CPacket decode(B buf) {
 				try {
 					Boolean success = buf.readBoolean();
 
 					return switch (success) {
 						case Boolean s when s -> {
-							C packet = packetCodec.decode(buf);
+							HypixelS2CPacket packet = packetCodec.decode(buf);
 
 							//This is used only for the HelloS2CPacket right now, which can return extra bytes if necessary in the future
 							readAllBytes(buf, false);
@@ -99,18 +92,18 @@ public class PacketCodecUtils {
 
 						case Boolean s when !s -> errorCodec.decode(buf);
 
-						default -> (C) HypixelS2CPacket.NOP;
+						default -> HypixelS2CPacket.NOP;
 					};
 				} catch (Throwable t) {
 					LOGGER.error("[HM API] Encountered an unexpected exception while decoding a packet!", t);
 				}
 
-				return (C) HypixelS2CPacket.NOP;
+				return HypixelS2CPacket.NOP;
 			}
 
 			//Only used for S2C
 			@Override
-			public void encode(B buf, C value) {
+			public void encode(B buf, HypixelS2CPacket value) {
 				throw new UnsupportedOperationException();
 			}
 		};

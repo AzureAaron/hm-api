@@ -42,8 +42,7 @@ public class DispatchedCodecPacketTest {
 		.writeVarInt(2)
 		.writeOptional(Optional.<String>empty(), PacketByteBuf::writeString);
 
-		@SuppressWarnings("unchecked")
-		Int2ObjectOpenHashMap<PacketCodec<RegistryByteBuf, HypixelS2CPacket>> playerInfoPacketCodecs = Util.make(new Int2ObjectOpenHashMap<>(), map -> map.put(1, PacketCodec.class.cast(PlayerInfoS2CPacket.PACKET_CODEC)));
+		Int2ObjectOpenHashMap<PacketCodec<RegistryByteBuf, ? extends HypixelS2CPacket>> playerInfoPacketCodecs = Util.make(new Int2ObjectOpenHashMap<>(), map -> map.put(1, PlayerInfoS2CPacket.PACKET_CODEC));
 
 		PlayerInfoS2CPacket expected = new PlayerInfoS2CPacket(PlayerRank.NORMAL, PackageRank.MVP_PLUS, MonthlyPackageRank.SUPERSTAR, Optional.empty());
 		HypixelS2CPacket actual = PacketCodecUtils.dispatchHypixel(playerInfoPacketCodecs, ErrorS2CPacket.PACKET_CODEC.apply(PlayerInfoS2CPacket.ID)).decode(buf);
