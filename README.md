@@ -12,6 +12,7 @@ The `ping` packet is unsupported due to it serving as more of a test for impleme
 ### Mods using HM API
 - <img src="https://raw.githubusercontent.com/AzureAaron/aaron-mod/1.20/src/main/resources/assets/aaron-mod/icon.png" width="32" height="32" align="center"> [Aaron's Mod](https://modrinth.com/mod/aaron-mod)
 - <img src="https://raw.githubusercontent.com/SkyblockerMod/Skyblocker/master/src/main/resources/assets/skyblocker/icon.png" width="32" height="32" align="center"> [Skyblocker](https://modrinth.com/mod/skyblocker-liap)
+- <img src="https://raw.githubusercontent.com/MisterCheezeCake/SkyblockTweaks/main/src/main/resources/assets/skyblocktweaks/icon.png" width="32" height="32" align="center"> [Skyblock Tweaks](https://modrinth.com/mod/sbt)
 
 ## Requirements
 - Minecraft 1.21+
