@@ -25,17 +25,17 @@ import net.minecraft.util.Util;
 
 public class HMApi implements ClientModInitializer {
 	private static final Logger LOGGER = LogUtils.getLogger();
-    private static final boolean DEBUG_ENABLED = Boolean.parseBoolean(System.getProperty("hmapi.debug", "false")) || FabricLoader.getInstance().isDevelopmentEnvironment();
+	private static final boolean DEBUG_ENABLED = Boolean.parseBoolean(System.getProperty("hmapi.debug", "false")) || FabricLoader.getInstance().isDevelopmentEnvironment();
 
-    private static boolean sentPacket;
-    private static boolean listenToEventPackets;
-    private static boolean listenToAllPackets;
+	private static boolean sentPacket;
+	private static boolean listenToEventPackets;
+	private static boolean listenToAllPackets;
 
-    /**
-     * This class is not part of the API.
-     */
-    @Deprecated(forRemoval = true)
-    public HMApi () {}
+	/**
+	 * This class is not part of the API.
+	 */
+	@Deprecated(forRemoval = true)
+	public HMApi () {}
 
 	@Override
 	public void onInitializeClient() {		
