@@ -31,6 +31,12 @@ public class HMApi implements ClientModInitializer {
     private static boolean listenToEventPackets;
     private static boolean listenToAllPackets;
 
+    /**
+     * This class is not part of the API.
+     */
+    @Deprecated(forRemoval = true)
+    public HMApi () {}
+
 	@Override
 	public void onInitializeClient() {		
 		if (DEBUG_ENABLED) {

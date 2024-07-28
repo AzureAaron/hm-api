@@ -28,6 +28,8 @@ public class HypixelNetworking {
 	private static final Object2ObjectMap<CustomPayload.Id<HypixelS2CPacket>, IntList> VALID_EVENTS = Util.make(new Object2ObjectOpenHashMap<>(), map -> map.put(LocationUpdateS2CPacket.ID, Util.make(new IntArrayList(), list -> list.add(1))));
 	static final Object2IntMap<CustomPayload.Id<HypixelS2CPacket>> REGISTERED_EVENTS = new Object2IntOpenHashMap<>();
 
+	private HypixelNetworking() {}
+
 	/**
 	 * @param version must be 2
 	 * 

@@ -38,6 +38,8 @@ public class HypixelPacketEvents {
 	 */
 	public static final Event<PacketCallback> LOCATION_UPDATE = createEvent();
 
+	private HypixelPacketEvents() {}
+
 	private static Event<PacketCallback> createEvent() {
 		return EventFactory.createArrayBacked(PacketCallback.class, callbacks -> packet -> {
 			for (PacketCallback callback : callbacks) {
