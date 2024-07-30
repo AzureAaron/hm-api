@@ -9,7 +9,6 @@ import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.azureaaron.hmapi.events.HypixelPacketEvents;
 import net.azureaaron.hmapi.network.HypixelNetworking;
-import net.azureaaron.hmapi.network.packet.s2c.HelloS2CPacket;
 import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
 import net.azureaaron.hmapi.network.packet.v1.s2c.LocationUpdateS2CPacket;
 import net.fabricmc.api.ClientModInitializer;
@@ -27,9 +26,7 @@ public class HMApi implements ClientModInitializer {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private static final boolean DEBUG_ENABLED = Boolean.parseBoolean(System.getProperty("hmapi.debug", "false")) || FabricLoader.getInstance().isDevelopmentEnvironment();
 
-	private static boolean sentPacket;
-	private static boolean listenToEventPackets;
-	private static boolean listenToAllPackets;
+	private static boolean sendPacketsInChat;
 
 	/**
 	 * This class is not part of the API.
@@ -54,14 +51,12 @@ public class HMApi implements ClientModInitializer {
 						.then(ClientCommandManager.literal("partyInfo2")
 								.executes(context -> {
 									HypixelNetworking.sendPartyInfoC2SPacket(2);
-									sentPacket = true;
 
 									return Command.SINGLE_SUCCESS;
 								}))
 						.then(ClientCommandManager.literal("playerInfo")
 								.executes(context -> {
 									HypixelNetworking.sendPlayerInfoC2SPacket(1);
-									sentPacket = true;
 
 									return Command.SINGLE_SUCCESS;
 								}))
@@ -74,30 +69,21 @@ public class HMApi implements ClientModInitializer {
 									return Command.SINGLE_SUCCESS;
 								}))
 						)
-				.then(ClientCommandManager.literal("toggleListenToEvents")
+				.then(ClientCommandManager.literal("toggleSendPacketsInChat")
 						.executes(context -> {
-							listenToEventPackets = !listenToEventPackets;
-
-							return Command.SINGLE_SUCCESS;
-						}))
-				.then(ClientCommandManager.literal("toggleListenToAllPackets")
-						.executes(context -> {
-							listenToAllPackets = !listenToAllPackets;
+							sendPacketsInChat = true;
 
 							return Command.SINGLE_SUCCESS;
 						})));
 	}
 
 	private static void logPacket(HypixelS2CPacket packet) {
-		boolean isEventPacket = packet instanceof LocationUpdateS2CPacket || packet instanceof HelloS2CPacket;
+		ClientPlayerEntity player = MinecraftClient.getInstance().player;
 
-		if ((isEventPacket && listenToEventPackets) || sentPacket || listenToAllPackets) {
-			LOGGER.info("[HM API] Received Packet: {}", packet);
-			ClientPlayerEntity player = MinecraftClient.getInstance().player;
+		LOGGER.info("[HM API] Received Packet: {}", packet);
 
-			if (player != null) player.sendMessage(Text.of(packet.toString()));
-
-			if (!isEventPacket) sentPacket = false;
+		if (player != null && sendPacketsInChat) {
+			player.sendMessage(Text.of(packet.toString()));
 		}
 	}
 }
