@@ -4,6 +4,9 @@ import java.util.function.IntFunction;
 
 import net.minecraft.util.function.ValueLists;
 
+/**
+ * Represents a base rank type.
+ */
 public enum PlayerRank {
 	NORMAL(1),
 	YOUTUBER(2),

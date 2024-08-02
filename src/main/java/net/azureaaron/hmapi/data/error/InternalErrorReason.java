@@ -1,5 +1,8 @@
 package net.azureaaron.hmapi.data.error;
 
+/**
+ * Error reasons specific to the library's Mod API implementation.
+ */
 public enum InternalErrorReason implements ErrorReason {
 	/**
 	 * Catch all for unknown {@link ModApiErrorReason}s.

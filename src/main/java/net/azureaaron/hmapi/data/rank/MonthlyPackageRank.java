@@ -4,6 +4,9 @@ import java.util.function.IntFunction;
 
 import net.minecraft.util.function.ValueLists;
 
+/**
+ * Represents a monthly subscription rank, only relevant for MVP++ right now.
+ */
 public enum MonthlyPackageRank {
 	NONE(1),
 	/**

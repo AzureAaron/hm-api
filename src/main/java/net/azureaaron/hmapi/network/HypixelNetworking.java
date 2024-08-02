@@ -20,7 +20,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 /**
- * Public interface for interacting with Hypixel's Mod API.
+ * Public interface for interacting with the networking component (sending packets) of the Mod API.
  * 
  * @implNote There is a global cooldown of 1 second between trying send a specific packet type. Additionally, all packet send methods should be called from the {@code Render Thread}.
  */

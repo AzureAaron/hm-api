@@ -8,9 +8,12 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
 /**
- * This record/packet is subject to potentially breaking changes in the future as specified by Hypixel.
+ * This packet is sent each time upon logging into Hypixel, currently it only communicates the server's environment.
  * 
- * In the event of anything unexpected, we return a default fallback value to avoid any unexpected behaviour.
+ * @param environment The current Hypixel server environment
+ * 
+ * @see {@link Environment}
+ * @implSpec This record/packet is subject to potentially breaking changes in the future without notice as specified by Hypixel.
  */
 public record HelloS2CPacket(Environment environment) implements HypixelS2CPacket {
 	public static final CustomPayload.Id<HypixelS2CPacket> ID = new CustomPayload.Id<>(Identifier.of("hypixel", "hello"));

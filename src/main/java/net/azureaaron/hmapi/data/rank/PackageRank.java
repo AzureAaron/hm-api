@@ -4,6 +4,9 @@ import java.util.function.IntFunction;
 
 import net.minecraft.util.function.ValueLists;
 
+/**
+ * Represents a paid rank.
+ */
 public enum PackageRank {
 	NONE(1),
 	VIP(2),

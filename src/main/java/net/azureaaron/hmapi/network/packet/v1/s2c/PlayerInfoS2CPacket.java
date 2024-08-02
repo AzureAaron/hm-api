@@ -12,6 +12,14 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
+/**
+ * This packet gives information about the player's rank and how its displayed.
+ * 
+ * @param playerRank         the player's base rank type
+ * @param packageRank        the player's paid rank (if applicable) (e.g. MVP++)
+ * @param monthlyPackageRank the player's monthly subscription rank, currently only MVP++ applies to this
+ * @param prefix             the player's rank prefix override (Note: this may contain formatting codes)
+ */
 public record PlayerInfoS2CPacket(PlayerRank playerRank, PackageRank packageRank, MonthlyPackageRank monthlyPackageRank, Optional<String> prefix) implements HypixelS2CPacket {
 	public static final CustomPayload.Id<HypixelS2CPacket> ID = new CustomPayload.Id<>(Identifier.of("hypixel", "player_info"));
 	public static final PacketCodec<RegistryByteBuf, PlayerInfoS2CPacket> PACKET_CODEC = PacketCodec.tuple(PacketCodecs.indexed(PlayerRank.BY_ID, PlayerRank::id), PlayerInfoS2CPacket::playerRank,
