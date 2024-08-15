@@ -17,6 +17,7 @@ public enum ModApiErrorReason implements ErrorReason {
 	NO_LONGER_SUPPORTED(5);
 
 	private static final IntFunction<ModApiErrorReason> BY_ID = ValueLists.createIdToValueFunction(ModApiErrorReason::id, ModApiErrorReason.values(), (ModApiErrorReason) null);
+
 	private final int id;
 
 	ModApiErrorReason(int id) {
@@ -24,6 +25,7 @@ public enum ModApiErrorReason implements ErrorReason {
 	}
 
 	@Override
+	@ApiStatus.Internal
 	public int id() {
 		return this.id;
 	}
