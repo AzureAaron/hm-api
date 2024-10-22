@@ -83,7 +83,7 @@ public class HMApi implements ClientModInitializer {
 		LOGGER.info("[HM API] Received Packet: {}", packet);
 
 		if (player != null && sendPacketsInChat) {
-			player.sendMessage(Text.of(packet.toString()));
+			player.sendMessage(Text.of(packet.toString()), false);
 		}
 	}
 }

@@ -37,6 +37,7 @@ public class HypixelNetworkingImpl {
 
 	static <T extends HypixelC2SPacket> PacketSendResult sendPacket(T payload, boolean bypassCooldown) {
 		if ((System.currentTimeMillis() + COOLDOWN > COOLDOWNS.computeIfAbsent(payload.getId(), _id -> 0L)) || bypassCooldown) {
+			//TODO log if its null with fatal
 			Objects.requireNonNull(CLIENT.getNetworkHandler(), "Cannot send packet while not in game!").sendPacket(new CustomPayloadC2SPacket(payload));
 			COOLDOWNS.put(payload.getId(), System.currentTimeMillis());
 
@@ -46,6 +47,7 @@ public class HypixelNetworkingImpl {
 		return PacketSendResult.onCooldown(COOLDOWNS.getLong(payload.getId()) - System.currentTimeMillis());
 	}
 
+	//TODO unify this and the logic in the non-impl class as its the same - rename to just sendEventRegistrations?
 	private static void sendInitialEventRegistrations() {
 		if (!HypixelNetworking.REGISTERED_EVENTS.isEmpty()) {
 			Object2IntMap<Identifier> packetsToRegisterFor = HypixelNetworking.REGISTERED_EVENTS.object2IntEntrySet().stream()
