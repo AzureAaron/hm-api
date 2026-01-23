@@ -10,28 +10,28 @@ import net.azureaaron.hmapi.data.rank.MonthlyPackageRank;
 import net.azureaaron.hmapi.data.rank.PackageRank;
 import net.azureaaron.hmapi.data.rank.PlayerRank;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.Bootstrap;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.core.RegistryAccess;
 
 public class PlayerInfoS2CPacketTest {
 
 	@BeforeAll
 	public static void setupEnvironment() {
-		SharedConstants.createGameVersion();
-		Bootstrap.initialize();
+		SharedConstants.tryDetectVersion();
+		Bootstrap.bootStrap();
 	}
 
 	@Test
 	void testDeserializeByteBuf() {
-		RegistryByteBuf buf = RegistryByteBuf.makeFactory(DynamicRegistryManager.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 
 		buf.writeVarInt(1)
 		.writeVarInt(5)
 		.writeVarInt(2)
-		.writeOptional(Optional.<String>empty(), PacketByteBuf::writeString);
+		.writeOptional(Optional.<String>empty(), FriendlyByteBuf::writeUtf);
 
 		PlayerInfoS2CPacket expected = new PlayerInfoS2CPacket(PlayerRank.NORMAL, PackageRank.MVP_PLUS, MonthlyPackageRank.SUPERSTAR, Optional.empty());
 		PlayerInfoS2CPacket actual = PlayerInfoS2CPacket.PACKET_CODEC.decode(buf);

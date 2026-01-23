@@ -7,30 +7,30 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.Bootstrap;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.core.RegistryAccess;
 
 public class LocationUpdateS2CPacketTest {
 
 	@BeforeAll
 	public static void setupEnvironment() {
-		SharedConstants.createGameVersion();
-		Bootstrap.initialize();
+		SharedConstants.tryDetectVersion();
+		Bootstrap.bootStrap();
 	}
 
 	@Test
 	void testDeserializeByteBuf() {
-		RegistryByteBuf buf = RegistryByteBuf.makeFactory(DynamicRegistryManager.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 
-		buf.writeString("mini88H")
-		.writeOptional(Optional.of("SKYBLOCK"), PacketByteBuf::writeString);
+		buf.writeUtf("mini88H")
+		.writeOptional(Optional.of("SKYBLOCK"), FriendlyByteBuf::writeUtf);
 
-		buf.writeOptional(Optional.<String>empty(), PacketByteBuf::writeString);
-		buf.writeOptional(Optional.of("dynamic"), PacketByteBuf::writeString);
-		buf.writeOptional(Optional.of("Private Island"), PacketByteBuf::writeString);
+		buf.writeOptional(Optional.<String>empty(), FriendlyByteBuf::writeUtf);
+		buf.writeOptional(Optional.of("dynamic"), FriendlyByteBuf::writeUtf);
+		buf.writeOptional(Optional.of("Private Island"), FriendlyByteBuf::writeUtf);
 
 		LocationUpdateS2CPacket expected = new LocationUpdateS2CPacket("mini88H", Optional.of("SKYBLOCK"), Optional.empty(), Optional.of("dynamic"), Optional.of("Private Island"));
 		LocationUpdateS2CPacket actual = LocationUpdateS2CPacket.PACKET_CODEC.decode(buf);
