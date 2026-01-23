@@ -26,7 +26,7 @@ import net.azureaaron.hmapi.utils.PacketSendResult;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 @ApiStatus.Internal
 public class HypixelNetworkingImpl {
@@ -50,7 +50,7 @@ public class HypixelNetworkingImpl {
 	//TODO unify this and the logic in the non-impl class as its the same - rename to just sendEventRegistrations?
 	private static void sendInitialEventRegistrations() {
 		if (!HypixelNetworking.REGISTERED_EVENTS.isEmpty()) {
-			Object2IntMap<ResourceLocation> packetsToRegisterFor = HypixelNetworking.REGISTERED_EVENTS.object2IntEntrySet().stream()
+			Object2IntMap<Identifier> packetsToRegisterFor = HypixelNetworking.REGISTERED_EVENTS.object2IntEntrySet().stream()
 					.collect(Collectors.toMap(e -> e.getKey().id(), Object2IntMap.Entry::getIntValue, (a, b) -> a > b ? a : b, Object2IntOpenHashMap::new));
 
 			sendPacket(new RegisterC2SPacket(1, packetsToRegisterFor), true);

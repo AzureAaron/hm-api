@@ -3,16 +3,16 @@ package net.azureaaron.hmapi.network.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public interface HypixelPacket extends CustomPacketPayload {
 
 	@ApiStatus.Internal
-	public record Unknown(ResourceLocation id) implements HypixelPacket {
+	public record Unknown(Identifier id) implements HypixelPacket {
 
-		public static StreamCodec<FriendlyByteBuf, Unknown> createPacketCodec(ResourceLocation id) {
+		public static StreamCodec<FriendlyByteBuf, Unknown> createPacketCodec(Identifier id) {
 			return new StreamCodec<>() {
 
 				@Override

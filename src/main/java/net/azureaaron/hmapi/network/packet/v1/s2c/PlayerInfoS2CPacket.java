@@ -10,7 +10,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * This packet gives information about the player's rank and how its displayed.
@@ -21,7 +21,7 @@ import net.minecraft.resources.ResourceLocation;
  * @param prefix             the player's rank prefix override (Note: this may contain formatting codes)
  */
 public record PlayerInfoS2CPacket(PlayerRank playerRank, PackageRank packageRank, MonthlyPackageRank monthlyPackageRank, Optional<String> prefix) implements HypixelS2CPacket {
-	public static final CustomPacketPayload.Type<HypixelS2CPacket> ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("hypixel", "player_info"));
+	public static final CustomPacketPayload.Type<HypixelS2CPacket> ID = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("hypixel", "player_info"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, PlayerInfoS2CPacket> PACKET_CODEC = StreamCodec.composite(ByteBufCodecs.idMapper(PlayerRank.BY_ID, PlayerRank::id), PlayerInfoS2CPacket::playerRank,
 			ByteBufCodecs.idMapper(PackageRank.BY_ID, PackageRank::id), PlayerInfoS2CPacket::packageRank,
 			ByteBufCodecs.idMapper(MonthlyPackageRank.BY_ID, MonthlyPackageRank::id), PlayerInfoS2CPacket::monthlyPackageRank,

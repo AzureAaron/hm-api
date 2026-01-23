@@ -16,7 +16,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * This packet gives information about whether the player is in a party, and if they are the {@link #members} map is populated with each party member and their role.
@@ -25,7 +25,7 @@ import net.minecraft.resources.ResourceLocation;
  * @param members a mapping of player {@link UUID}s to {@link PartyRole}s, this field will not be null when {@link #inParty} returns true
  */
 public record PartyInfoS2CPacket(boolean inParty, @Nullable @Unmodifiable Map<UUID, PartyRole> members) implements HypixelS2CPacket {
-	public static final CustomPacketPayload.Type<HypixelS2CPacket> ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("hypixel", "party_info"));
+	public static final CustomPacketPayload.Type<HypixelS2CPacket> ID = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("hypixel", "party_info"));
 	private static final StreamCodec<RegistryFriendlyByteBuf, PartyInfoS2CPacket> IN_PARTY_PACKET_CODEC = StreamCodec.composite(ByteBufCodecs.map(Object2ReferenceOpenHashMap::new, UUIDUtil.STREAM_CODEC, ByteBufCodecs.idMapper(i -> PartyRole.values()[i], PartyRole::ordinal)), PartyInfoS2CPacket::members, PartyInfoS2CPacket::new);
 	public static final StreamCodec<RegistryFriendlyByteBuf, PartyInfoS2CPacket> PACKET_CODEC = PacketCodecUtils.dispatchConditionally(IN_PARTY_PACKET_CODEC, StreamCodec.unit(new PartyInfoS2CPacket(false, null)));
 

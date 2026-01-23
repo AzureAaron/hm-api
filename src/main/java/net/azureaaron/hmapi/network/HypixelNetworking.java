@@ -15,9 +15,9 @@ import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
 import net.azureaaron.hmapi.network.packet.v1.s2c.LocationUpdateS2CPacket;
 import net.azureaaron.hmapi.utils.PacketSendResult;
 import net.azureaaron.hmapi.utils.Utils;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Public interface for interacting with the networking component (sending packets) of the Mod API.
@@ -90,7 +90,7 @@ public class HypixelNetworking {
 
 			//Only register when we're on Hypixel to allow for events to be registered at mod init
 			if (Utils.isOnHypixel()) {
-				Object2IntMap<ResourceLocation> packetsToRegisterFor = REGISTERED_EVENTS.object2IntEntrySet().stream()
+				Object2IntMap<Identifier> packetsToRegisterFor = REGISTERED_EVENTS.object2IntEntrySet().stream()
 						.collect(Collectors.toMap(e -> e.getKey().id(), Object2IntMap.Entry::getIntValue, (a, b) -> a > b ? a : b, Object2IntOpenHashMap::new));
 
 				HypixelNetworkingImpl.sendPacket(new RegisterC2SPacket(1, packetsToRegisterFor), true);

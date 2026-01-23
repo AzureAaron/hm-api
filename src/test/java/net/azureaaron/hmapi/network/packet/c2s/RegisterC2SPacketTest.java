@@ -13,8 +13,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.Util;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 
 public class RegisterC2SPacketTest {
 
@@ -29,11 +29,11 @@ public class RegisterC2SPacketTest {
 		RegistryFriendlyByteBuf expected = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 		RegistryFriendlyByteBuf actual = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 
-		Object2IntMap<ResourceLocation> wantedPackets = Util.make(new Object2IntOpenHashMap<>(), map -> map.put(LocationUpdateS2CPacket.ID.id(), 1));
+		Object2IntMap<Identifier> wantedPackets = Util.make(new Object2IntOpenHashMap<>(), map -> map.put(LocationUpdateS2CPacket.ID.id(), 1));
 
 		expected
 		.writeVarInt(1)
-		.writeMap(wantedPackets, ResourceLocation.STREAM_CODEC, ByteBufCodecs.VAR_INT);
+		.writeMap(wantedPackets, Identifier.STREAM_CODEC, ByteBufCodecs.VAR_INT);
 
 		RegisterC2SPacket.PACKET_CODEC.encode(actual, new RegisterC2SPacket(1, wantedPackets));
 

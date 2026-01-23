@@ -21,7 +21,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 
 public class DispatchedCodecPacketTest {
 
