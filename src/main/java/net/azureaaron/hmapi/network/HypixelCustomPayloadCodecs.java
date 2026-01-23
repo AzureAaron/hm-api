@@ -15,22 +15,22 @@ import net.azureaaron.hmapi.network.packet.v1.s2c.LocationUpdateS2CPacket;
 import net.azureaaron.hmapi.network.packet.v1.s2c.PlayerInfoS2CPacket;
 import net.azureaaron.hmapi.network.packet.v2.s2c.PartyInfoS2CPacket;
 import net.azureaaron.hmapi.utils.PacketCodecUtils;
-import net.minecraft.network.NetworkSide;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Util;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 @ApiStatus.Internal
 public class HypixelCustomPayloadCodecs {
-	private static final PacketCodec<PacketByteBuf, CustomPayload> C2S_PACKET_CODEC = CustomPayload.createCodec(
+	private static final StreamCodec<FriendlyByteBuf, CustomPacketPayload> C2S_PACKET_CODEC = CustomPacketPayload.codec(
 			HypixelPacket.Unknown::createPacketCodec, Lists.newArrayList(
 					createType(PartyInfoC2SPacket.ID, PartyInfoC2SPacket.PACKET_CODEC),
 					createType(PlayerInfoC2SPacket.ID, PlayerInfoC2SPacket.PACKET_CODEC),
 					createType(RegisterC2SPacket.ID, RegisterC2SPacket.PACKET_CODEC))
 			);
 
-	private static final PacketCodec<PacketByteBuf, CustomPayload> S2C_PACKET_CODEC = CustomPayload.createCodec(
+	private static final StreamCodec<FriendlyByteBuf, CustomPacketPayload> S2C_PACKET_CODEC = CustomPacketPayload.codec(
 			HypixelPacket.Unknown::createPacketCodec, Lists.newArrayList(
 					createType(PartyInfoS2CPacket.ID, PacketCodecUtils.dispatchHypixel(
 							Util.make(new Int2ObjectOpenHashMap<>(), map -> {
@@ -47,11 +47,11 @@ public class HypixelCustomPayloadCodecs {
 			);
 
 	@SuppressWarnings("unchecked")
-	private static <B extends PacketByteBuf, T extends CustomPayload> CustomPayload.Type<PacketByteBuf, CustomPayload> createType(CustomPayload.Id<T> id, PacketCodec<B, T> packetCodec) {
-		return new CustomPayload.Type<>(id, PacketCodec.class.cast(packetCodec));
+	private static <B extends FriendlyByteBuf, T extends CustomPacketPayload> CustomPacketPayload.TypeAndCodec<FriendlyByteBuf, CustomPacketPayload> createType(CustomPacketPayload.Type<T> id, StreamCodec<B, T> packetCodec) {
+		return new CustomPacketPayload.TypeAndCodec<>(id, StreamCodec.class.cast(packetCodec));
 	}
 
-	static PacketCodec<PacketByteBuf, CustomPayload> get4Direction(NetworkSide direction) {
+	static StreamCodec<FriendlyByteBuf, CustomPacketPayload> get4Direction(PacketFlow direction) {
 		return switch (direction) {
 			case SERVERBOUND -> C2S_PACKET_CODEC;
 			case CLIENTBOUND -> S2C_PACKET_CODEC;

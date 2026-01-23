@@ -6,17 +6,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
 import net.azureaaron.hmapi.network.WrappedPacketCodec;
-import net.minecraft.network.NetworkSide;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.network.packet.c2s.common.CustomPayloadC2SPacket;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-@Mixin(value = CustomPayloadC2SPacket.class, priority = 1888)
+@Mixin(value = ServerboundCustomPayloadPacket.class, priority = 1888)
 public class CustomPayloadC2SPacketMixin {
 
-	@ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/CustomPayload;createCodec(Lnet/minecraft/network/packet/CustomPayload$CodecFactory;Ljava/util/List;)Lnet/minecraft/network/codec/PacketCodec;"))
-	private static PacketCodec<PacketByteBuf, CustomPayload> wrapC2SPacketCodec(PacketCodec<PacketByteBuf, CustomPayload> original) {
-		return new WrappedPacketCodec(original, NetworkSide.SERVERBOUND);
+	@ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;codec(Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload$FallbackProvider;Ljava/util/List;)Lnet/minecraft/network/codec/StreamCodec;"))
+	private static StreamCodec<FriendlyByteBuf, CustomPacketPayload> wrapC2SPacketCodec(StreamCodec<FriendlyByteBuf, CustomPacketPayload> original) {
+		return new WrappedPacketCodec(original, PacketFlow.SERVERBOUND);
 	}
 }

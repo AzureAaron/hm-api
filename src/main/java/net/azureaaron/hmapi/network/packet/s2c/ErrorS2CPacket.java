@@ -4,10 +4,10 @@ import java.util.function.Function;
 
 import net.azureaaron.hmapi.data.error.ErrorReason;
 import net.azureaaron.hmapi.data.error.ModApiErrorReason;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 /**
  * This packet is used to communicate when Hypixel returned an error instead of a successful packet.
@@ -18,12 +18,12 @@ import net.minecraft.network.packet.CustomPayload;
  * @see {@link ModApiErrorReason}
  * @see {@link net.azureaaron.hmapi.data.error.InternalErrorReason InternalErrorReason}
  */
-public record ErrorS2CPacket(CustomPayload.Id<HypixelS2CPacket> id, ErrorReason reason) implements HypixelS2CPacket {
-	public static final Function<CustomPayload.Id<HypixelS2CPacket>, PacketCodec<RegistryByteBuf, ErrorS2CPacket>> PACKET_CODEC = payloadId -> PacketCodec.tuple(PacketCodecs.indexed(ModApiErrorReason::tryResolveReason, ErrorReason::id), ErrorS2CPacket::reason,
+public record ErrorS2CPacket(CustomPacketPayload.Type<HypixelS2CPacket> id, ErrorReason reason) implements HypixelS2CPacket {
+	public static final Function<CustomPacketPayload.Type<HypixelS2CPacket>, StreamCodec<RegistryFriendlyByteBuf, ErrorS2CPacket>> PACKET_CODEC = payloadId -> StreamCodec.composite(ByteBufCodecs.idMapper(ModApiErrorReason::tryResolveReason, ErrorReason::id), ErrorS2CPacket::reason,
 			errorId -> new ErrorS2CPacket(payloadId, errorId));
 
 	@Override
-	public Id<? extends CustomPayload> getId() {
+	public Type<? extends CustomPacketPayload> type() {
 		return this.id;
 	}
 }

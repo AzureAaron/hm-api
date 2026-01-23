@@ -1,10 +1,8 @@
 package net.azureaaron.hmapi.data.rank;
 
 import java.util.function.IntFunction;
-
+import net.minecraft.util.ByIdMap;
 import org.jetbrains.annotations.ApiStatus;
-
-import net.minecraft.util.function.ValueLists;
 
 /**
  * Represents a base rank type.
@@ -16,7 +14,7 @@ public enum PlayerRank implements RankType {
 	ADMIN(4);
 
 	@ApiStatus.Internal
-	public static final IntFunction<PlayerRank> BY_ID = ValueLists.createIdToValueFunction(PlayerRank::id, PlayerRank.values(), PlayerRank.NORMAL);
+	public static final IntFunction<PlayerRank> BY_ID = ByIdMap.sparse(PlayerRank::id, PlayerRank.values(), PlayerRank.NORMAL);
 
 	private final int id;
 

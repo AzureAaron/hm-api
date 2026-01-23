@@ -6,11 +6,11 @@ import net.azureaaron.hmapi.data.rank.MonthlyPackageRank;
 import net.azureaaron.hmapi.data.rank.PackageRank;
 import net.azureaaron.hmapi.data.rank.PlayerRank;
 import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
 /**
  * This packet gives information about the player's rank and how its displayed.
@@ -21,15 +21,15 @@ import net.minecraft.util.Identifier;
  * @param prefix             the player's rank prefix override (Note: this may contain formatting codes)
  */
 public record PlayerInfoS2CPacket(PlayerRank playerRank, PackageRank packageRank, MonthlyPackageRank monthlyPackageRank, Optional<String> prefix) implements HypixelS2CPacket {
-	public static final CustomPayload.Id<HypixelS2CPacket> ID = new CustomPayload.Id<>(Identifier.of("hypixel", "player_info"));
-	public static final PacketCodec<RegistryByteBuf, PlayerInfoS2CPacket> PACKET_CODEC = PacketCodec.tuple(PacketCodecs.indexed(PlayerRank.BY_ID, PlayerRank::id), PlayerInfoS2CPacket::playerRank,
-			PacketCodecs.indexed(PackageRank.BY_ID, PackageRank::id), PlayerInfoS2CPacket::packageRank,
-			PacketCodecs.indexed(MonthlyPackageRank.BY_ID, MonthlyPackageRank::id), PlayerInfoS2CPacket::monthlyPackageRank,
-			PacketCodecs.optional(PacketCodecs.STRING), PlayerInfoS2CPacket::prefix,
+	public static final CustomPacketPayload.Type<HypixelS2CPacket> ID = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("hypixel", "player_info"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, PlayerInfoS2CPacket> PACKET_CODEC = StreamCodec.composite(ByteBufCodecs.idMapper(PlayerRank.BY_ID, PlayerRank::id), PlayerInfoS2CPacket::playerRank,
+			ByteBufCodecs.idMapper(PackageRank.BY_ID, PackageRank::id), PlayerInfoS2CPacket::packageRank,
+			ByteBufCodecs.idMapper(MonthlyPackageRank.BY_ID, MonthlyPackageRank::id), PlayerInfoS2CPacket::monthlyPackageRank,
+			ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), PlayerInfoS2CPacket::prefix,
 			PlayerInfoS2CPacket::new);
 
 	@Override
-	public Id<? extends CustomPayload> getId() {
+	public Type<? extends CustomPacketPayload> type() {
 		return ID;
 	}
 }
