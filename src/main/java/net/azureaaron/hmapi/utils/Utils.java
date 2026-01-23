@@ -1,8 +1,7 @@
 package net.azureaaron.hmapi.utils;
 
+import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.ApiStatus;
-
-import net.minecraft.client.MinecraftClient;
 
 @ApiStatus.Internal
 public class Utils {
@@ -12,9 +11,9 @@ public class Utils {
 	private static final String HYPIXEL_ADDRESS_OVERRIDE = System.getProperty("hmapi.alternateHypixelAddress", "");
 
 	public static boolean isOnHypixel() {
-		MinecraftClient client = MinecraftClient.getInstance();
-		String serverAddress = client.getCurrentServerEntry() != null ? client.getCurrentServerEntry().address.toLowerCase() : "";
-		String serverBrand = client.player != null && client.player.networkHandler != null && client.player.networkHandler.getBrand() != null ? client.player.networkHandler.getBrand() : "";
+		Minecraft client = Minecraft.getInstance();
+		String serverAddress = client.getCurrentServer() != null ? client.getCurrentServer().ip.toLowerCase() : "";
+		String serverBrand = client.player != null && client.player.connection != null && client.player.connection.serverBrand() != null ? client.player.connection.serverBrand() : "";
 
 		return (!serverAddress.isEmpty() && HYPIXEL_ADDRESS_OVERRIDE.equalsIgnoreCase(serverAddress)) || serverAddress.contains("hypixel.net") || serverAddress.contains("hypixel.io") || serverBrand.contains("Hypixel BungeeCord");
 	}

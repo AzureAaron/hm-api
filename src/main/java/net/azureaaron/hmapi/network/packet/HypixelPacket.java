@@ -1,37 +1,36 @@
 package net.azureaaron.hmapi.network.packet;
 
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
-
 @ApiStatus.Internal
-public interface HypixelPacket extends CustomPayload {
+public interface HypixelPacket extends CustomPacketPayload {
 
 	@ApiStatus.Internal
-	public record Unknown(Identifier id) implements HypixelPacket {
+	public record Unknown(ResourceLocation id) implements HypixelPacket {
 
-		public static PacketCodec<PacketByteBuf, Unknown> createPacketCodec(Identifier id) {
-			return new PacketCodec<>() {
+		public static StreamCodec<FriendlyByteBuf, Unknown> createPacketCodec(ResourceLocation id) {
+			return new StreamCodec<>() {
 
 				@Override
-				public Unknown decode(PacketByteBuf buf) {
+				public Unknown decode(FriendlyByteBuf buf) {
 					//Since we duplicate the buffer we don't need to read all bytes
 					return new Unknown(id);
 				}
 
 				@Override
-				public void encode(PacketByteBuf buf, Unknown value) {
+				public void encode(FriendlyByteBuf buf, Unknown value) {
 					//We will never encode this
 				}
 			};
 		}
 
 		@Override
-		public Id<Unknown> getId() {
-			return new CustomPayload.Id<>(this.id);
+		public Type<Unknown> type() {
+			return new CustomPacketPayload.Type<>(this.id);
 		}
 	}
 }

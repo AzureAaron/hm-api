@@ -10,28 +10,28 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
 import net.azureaaron.hmapi.network.HijackedCustomPayload;
 import net.azureaaron.hmapi.network.WrappedPacketCodec;
-import net.minecraft.network.NetworkSide;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.listener.ClientCommonPacketListener;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.network.packet.s2c.common.CustomPayloadS2CPacket;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.common.ClientCommonPacketListener;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-@Mixin(value = CustomPayloadS2CPacket.class, priority = 1888)
+@Mixin(value = ClientboundCustomPayloadPacket.class, priority = 1888)
 public abstract class CustomPayloadS2CPacketMixin {
 	@Shadow
-	public abstract CustomPayload payload();
+	public abstract CustomPacketPayload payload();
 
-	@ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/packet/CustomPayload;createCodec(Lnet/minecraft/network/packet/CustomPayload$CodecFactory;Ljava/util/List;)Lnet/minecraft/network/codec/PacketCodec;"))
-	private static PacketCodec<PacketByteBuf, CustomPayload> wrapS2CPacketCodec(PacketCodec<PacketByteBuf, CustomPayload> original) {
-		return new WrappedPacketCodec(original, NetworkSide.CLIENTBOUND);
+	@ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;codec(Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload$FallbackProvider;Ljava/util/List;)Lnet/minecraft/network/codec/StreamCodec;"))
+	private static StreamCodec<FriendlyByteBuf, CustomPacketPayload> wrapS2CPacketCodec(StreamCodec<FriendlyByteBuf, CustomPacketPayload> original) {
+		return new WrappedPacketCodec(original, PacketFlow.CLIENTBOUND);
 	}
 
-	@Inject(method = "apply", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "handle", at = @At("HEAD"), cancellable = true)
 	private void onApplication(ClientCommonPacketListener clientCommonPacketListener, CallbackInfo ci) {
 		if (payload() instanceof HijackedCustomPayload hijacked) {
-			new CustomPayloadS2CPacket(hijacked.original()).apply(clientCommonPacketListener);
-			new CustomPayloadS2CPacket(hijacked.hijacked()).apply(clientCommonPacketListener);
+			new ClientboundCustomPayloadPacket(hijacked.original()).handle(clientCommonPacketListener);
+			new ClientboundCustomPayloadPacket(hijacked.hijacked()).handle(clientCommonPacketListener);
 
 			ci.cancel();
 		}
