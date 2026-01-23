@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.FriendlyByteBuf;
@@ -23,7 +23,7 @@ public class LocationUpdateS2CPacketTest {
 
 	@Test
 	void testDeserializeByteBuf() {
-		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
 
 		buf.writeUtf("mini88H")
 		.writeOptional(Optional.of("SKYBLOCK"), FriendlyByteBuf::writeUtf);

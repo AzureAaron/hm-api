@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import net.azureaaron.hmapi.data.server.Environment;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -21,7 +21,7 @@ public class HelloS2CPacketTest {
 
 	@Test
 	void testDeserializeByteBuf() {
-		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
 
 		buf.writeVarInt(0);
 

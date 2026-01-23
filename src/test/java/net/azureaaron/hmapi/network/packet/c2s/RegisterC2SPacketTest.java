@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.azureaaron.hmapi.network.packet.v1.s2c.LocationUpdateS2CPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -26,8 +26,8 @@ public class RegisterC2SPacketTest {
 
 	@Test
 	void testSerializeByteBuf() {
-		RegistryFriendlyByteBuf expected = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
-		RegistryFriendlyByteBuf actual = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf expected = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
+		RegistryFriendlyByteBuf actual = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
 
 		Object2IntMap<Identifier> wantedPackets = Util.make(new Object2IntOpenHashMap<>(), map -> map.put(LocationUpdateS2CPacket.ID.id(), 1));
 

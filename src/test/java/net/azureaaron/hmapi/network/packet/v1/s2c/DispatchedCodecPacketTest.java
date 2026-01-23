@@ -14,7 +14,7 @@ import net.azureaaron.hmapi.data.rank.PlayerRank;
 import net.azureaaron.hmapi.network.packet.s2c.ErrorS2CPacket;
 import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
 import net.azureaaron.hmapi.utils.PacketCodecUtils;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,7 +33,7 @@ public class DispatchedCodecPacketTest {
 
 	@Test
 	void testNormalPacket() {
-		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
 
 		buf.writeBoolean(true)
 		.writeVarInt(1)
@@ -53,7 +53,7 @@ public class DispatchedCodecPacketTest {
 
 	@Test
 	void testUnknownVersionPacket() {
-		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
 
 		buf.writeBoolean(true)
 		.writeVarInt(256);
@@ -65,7 +65,7 @@ public class DispatchedCodecPacketTest {
 	
 	@Test
 	void testErrorPacket() {
-		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
 
 		buf.writeBoolean(false)
 		.writeVarInt(2);

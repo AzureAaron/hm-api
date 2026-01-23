@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import net.azureaaron.hmapi.data.party.PartyRole;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -29,7 +29,7 @@ public class PartyInfoS2CPacketTest {
 
 	@Test
 	void testDeserializeByteBuf() {
-		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
 		XoroshiroRandomSource rand = new XoroshiroRandomSource(0x88888888L);
 
 		Map<UUID, PartyRole> members = Util.make(new Object2ReferenceOpenHashMap<>(), map -> {
