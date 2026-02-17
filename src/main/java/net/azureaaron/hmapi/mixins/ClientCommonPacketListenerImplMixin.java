@@ -11,7 +11,7 @@ import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 
 @Mixin(value = ClientCommonPacketListenerImpl.class, priority = 888)
-public class ClientCommonNetworkHandlerMixin {
+public class ClientCommonPacketListenerImplMixin {
 
 	@Inject(method = "handleCustomPayload(Lnet/minecraft/network/protocol/common/ClientboundCustomPayloadPacket;)V", at = @At("HEAD"), cancellable = true)
 	private void onCustomPayloadReceived(ClientboundCustomPayloadPacket customPayload, CallbackInfo ci) {
