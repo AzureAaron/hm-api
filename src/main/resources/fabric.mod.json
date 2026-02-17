@@ -26,10 +26,10 @@
 		"hm-api.mixins.json"
 	],
 	"depends": {
-		"fabricloader": ">=0.16.7",
-		"minecraft": "~1.21.2",
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.11",
 		"java": ">=21",
-		"fabric-api": ">=0.106.0+1.21.2"
+		"fabric-api": ">=0.140.0+1.21.11"
 	},
 	"custom": {
 		"modmenu": {

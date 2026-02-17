@@ -17,7 +17,7 @@ public enum PackageRank implements RankType {
 	MVP_PLUS(5);
 
 	@ApiStatus.Internal
-	public static final IntFunction<PackageRank> BY_ID = ValueLists.createIdToValueFunction(PackageRank::id, PackageRank.values(), PackageRank.NONE);
+	public static final IntFunction<PackageRank> BY_ID = ValueLists.createIndexToValueFunction(PackageRank::id, PackageRank.values(), PackageRank.NONE);
 
 	private final int id;
 

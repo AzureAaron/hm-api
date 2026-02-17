@@ -17,7 +17,7 @@ public enum MonthlyPackageRank implements RankType {
 	SUPERSTAR(2);
 
 	@ApiStatus.Internal
-	public static final IntFunction<MonthlyPackageRank> BY_ID = ValueLists.createIdToValueFunction(MonthlyPackageRank::id, MonthlyPackageRank.values(), MonthlyPackageRank.NONE);
+	public static final IntFunction<MonthlyPackageRank> BY_ID = ValueLists.createIndexToValueFunction(MonthlyPackageRank::id, MonthlyPackageRank.values(), MonthlyPackageRank.NONE);
 
 	private final int id;
 

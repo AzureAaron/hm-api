@@ -16,7 +16,7 @@ public enum PlayerRank implements RankType {
 	ADMIN(4);
 
 	@ApiStatus.Internal
-	public static final IntFunction<PlayerRank> BY_ID = ValueLists.createIdToValueFunction(PlayerRank::id, PlayerRank.values(), PlayerRank.NORMAL);
+	public static final IntFunction<PlayerRank> BY_ID = ValueLists.createIndexToValueFunction(PlayerRank::id, PlayerRank.values(), PlayerRank.NORMAL);
 
 	private final int id;
 

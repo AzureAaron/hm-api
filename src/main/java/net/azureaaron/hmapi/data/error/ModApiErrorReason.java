@@ -16,7 +16,7 @@ public enum ModApiErrorReason implements ErrorReason {
 	INVALID_PACKET_VERSION(4),
 	NO_LONGER_SUPPORTED(5);
 
-	private static final IntFunction<ModApiErrorReason> BY_ID = ValueLists.createIdToValueFunction(ModApiErrorReason::id, ModApiErrorReason.values(), (ModApiErrorReason) null);
+	private static final IntFunction<ModApiErrorReason> BY_ID = ValueLists.createIndexToValueFunction(ModApiErrorReason::id, ModApiErrorReason.values(), (ModApiErrorReason) null);
 
 	private final int id;
 
