@@ -15,8 +15,8 @@ import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
 import net.azureaaron.hmapi.network.packet.v1.s2c.LocationUpdateS2CPacket;
 import net.azureaaron.hmapi.utils.PacketSendResult;
 import net.azureaaron.hmapi.utils.Utils;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 
 /**
@@ -25,8 +25,8 @@ import net.minecraft.util.Util;
  * @implNote There is a global cooldown of 1 second between trying send a specific packet type. Additionally, all packet send methods should be called from the {@code Render Thread}.
  */
 public class HypixelNetworking {
-	private static final Object2ObjectMap<CustomPayload.Id<HypixelS2CPacket>, IntList> VALID_EVENTS = Util.make(new Object2ObjectOpenHashMap<>(), map -> map.put(LocationUpdateS2CPacket.ID, Util.make(new IntArrayList(), list -> list.add(1))));
-	static final Object2IntMap<CustomPayload.Id<HypixelS2CPacket>> REGISTERED_EVENTS = new Object2IntOpenHashMap<>();
+	private static final Object2ObjectMap<CustomPacketPayload.Type<HypixelS2CPacket>, IntList> VALID_EVENTS = Util.make(new Object2ObjectOpenHashMap<>(), map -> map.put(LocationUpdateS2CPacket.ID, Util.make(new IntArrayList(), list -> list.add(1))));
+	static final Object2IntMap<CustomPacketPayload.Type<HypixelS2CPacket>> REGISTERED_EVENTS = new Object2IntOpenHashMap<>();
 
 	private HypixelNetworking() {}
 
@@ -65,11 +65,11 @@ public class HypixelNetworking {
 	 * to avoid any unexpected behavior it is important to keep up to date with this library and the Mod API at large. Note that this is a limitation of the Mod API
 	 * and not the library itself.
 	 */
-	public static void registerToEvents(Object2IntMap<CustomPayload.Id<HypixelS2CPacket>> requestedEvents) {
-		Object2IntMap<CustomPayload.Id<HypixelS2CPacket>> newEventRegistrations = new Object2IntOpenHashMap<>();
+	public static void registerToEvents(Object2IntMap<CustomPacketPayload.Type<HypixelS2CPacket>> requestedEvents) {
+		Object2IntMap<CustomPacketPayload.Type<HypixelS2CPacket>> newEventRegistrations = new Object2IntOpenHashMap<>();
 
-		for (Object2IntMap.Entry<CustomPayload.Id<HypixelS2CPacket>> entry : requestedEvents.object2IntEntrySet()) {
-			CustomPayload.Id<HypixelS2CPacket> id = entry.getKey();
+		for (Object2IntMap.Entry<CustomPacketPayload.Type<HypixelS2CPacket>> entry : requestedEvents.object2IntEntrySet()) {
+			CustomPacketPayload.Type<HypixelS2CPacket> id = entry.getKey();
 			int version = entry.getIntValue();
 
 			//Require that the requested event is actually an event and that the version is supported

@@ -15,34 +15,34 @@ import net.azureaaron.hmapi.network.packet.s2c.ErrorS2CPacket;
 import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
 import net.azureaaron.hmapi.utils.PacketCodecUtils;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.Bootstrap;
 import net.minecraft.SharedConstants;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.util.Util;
 
 public class DispatchedCodecPacketTest {
 
 	@BeforeAll
 	public static void setupEnvironment() {
-		SharedConstants.createGameVersion();
-		Bootstrap.initialize();
+		SharedConstants.tryDetectVersion();
+		Bootstrap.bootStrap();
 	}
 
 	@Test
 	void testNormalPacket() {
-		RegistryByteBuf buf = RegistryByteBuf.makeFactory(DynamicRegistryManager.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 
 		buf.writeBoolean(true)
 		.writeVarInt(1)
 		.writeVarInt(1)
 		.writeVarInt(5)
 		.writeVarInt(2)
-		.writeOptional(Optional.<String>empty(), PacketByteBuf::writeString);
+		.writeOptional(Optional.<String>empty(), FriendlyByteBuf::writeUtf);
 
-		Int2ObjectOpenHashMap<PacketCodec<RegistryByteBuf, ? extends HypixelS2CPacket>> playerInfoPacketCodecs = Util.make(new Int2ObjectOpenHashMap<>(), map -> map.put(1, PlayerInfoS2CPacket.PACKET_CODEC));
+		Int2ObjectOpenHashMap<StreamCodec<RegistryFriendlyByteBuf, ? extends HypixelS2CPacket>> playerInfoPacketCodecs = Util.make(new Int2ObjectOpenHashMap<>(), map -> map.put(1, PlayerInfoS2CPacket.PACKET_CODEC));
 
 		PlayerInfoS2CPacket expected = new PlayerInfoS2CPacket(PlayerRank.NORMAL, PackageRank.MVP_PLUS, MonthlyPackageRank.SUPERSTAR, Optional.empty());
 		HypixelS2CPacket actual = PacketCodecUtils.dispatchHypixel(playerInfoPacketCodecs, ErrorS2CPacket.PACKET_CODEC.apply(PlayerInfoS2CPacket.ID)).decode(buf);
@@ -53,7 +53,7 @@ public class DispatchedCodecPacketTest {
 
 	@Test
 	void testUnknownVersionPacket() {
-		RegistryByteBuf buf = RegistryByteBuf.makeFactory(DynamicRegistryManager.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 
 		buf.writeBoolean(true)
 		.writeVarInt(256);
@@ -65,7 +65,7 @@ public class DispatchedCodecPacketTest {
 	
 	@Test
 	void testErrorPacket() {
-		RegistryByteBuf buf = RegistryByteBuf.makeFactory(DynamicRegistryManager.EMPTY).apply(PacketByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 
 		buf.writeBoolean(false)
 		.writeVarInt(2);

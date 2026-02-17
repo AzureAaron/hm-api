@@ -16,10 +16,10 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Util;
 
 public class HMApi implements ClientModInitializer {
@@ -45,7 +45,7 @@ public class HMApi implements ClientModInitializer {
 		}
 	}
 
-	private static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+	private static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext registryAccess) {
 		dispatcher.register(ClientCommandManager.literal("hmapi")
 				.then(ClientCommandManager.literal("sendPacket")
 						.then(ClientCommandManager.literal("partyInfo2")
@@ -78,12 +78,12 @@ public class HMApi implements ClientModInitializer {
 	}
 
 	private static void logPacket(HypixelS2CPacket packet) {
-		ClientPlayerEntity player = MinecraftClient.getInstance().player;
+		LocalPlayer player = Minecraft.getInstance().player;
 
 		LOGGER.info("[HM API] Received Packet: {}", packet);
 
 		if (player != null && sendPacketsInChat) {
-			player.sendMessage(Text.of(packet.toString()), false);
+			player.displayClientMessage(Component.nullToEmpty(packet.toString()), false);
 		}
 	}
 }

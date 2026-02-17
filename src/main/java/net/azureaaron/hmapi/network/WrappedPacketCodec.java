@@ -4,26 +4,26 @@ import org.jetbrains.annotations.ApiStatus;
 
 import net.azureaaron.hmapi.network.packet.HypixelPacket;
 import net.azureaaron.hmapi.network.packet.c2s.HypixelC2SPacket;
-import net.minecraft.network.NetworkSide;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 @ApiStatus.Internal
-public record WrappedPacketCodec(PacketCodec<PacketByteBuf, CustomPayload> wrappedPacketCodec, NetworkSide direction) implements PacketCodec<PacketByteBuf, CustomPayload> {
+public record WrappedPacketCodec(StreamCodec<FriendlyByteBuf, CustomPacketPayload> wrappedPacketCodec, PacketFlow direction) implements StreamCodec<FriendlyByteBuf, CustomPacketPayload> {
 
 	@Override
-	public CustomPayload decode(PacketByteBuf buf) {
-		PacketByteBuf copiedBuf = new PacketByteBuf(buf.slice());
+	public CustomPacketPayload decode(FriendlyByteBuf buf) {
+		FriendlyByteBuf copiedBuf = new FriendlyByteBuf(buf.slice());
 
-		CustomPayload original = this.wrappedPacketCodec.decode(buf);
-		CustomPayload hijacked = HypixelCustomPayloadCodecs.get4Direction(this.direction).decode(copiedBuf);
+		CustomPacketPayload original = this.wrappedPacketCodec.decode(buf);
+		CustomPacketPayload hijacked = HypixelCustomPayloadCodecs.get4Direction(this.direction).decode(copiedBuf);
 
 		return hijacked instanceof HypixelPacket.Unknown ? original : new HijackedCustomPayload(original, hijacked);
 	}
 
 	@Override
-	public void encode(PacketByteBuf buf, CustomPayload payload) {
+	public void encode(FriendlyByteBuf buf, CustomPacketPayload payload) {
 		if (payload instanceof HypixelC2SPacket) {
 			HypixelCustomPayloadCodecs.get4Direction(this.direction).encode(buf, payload);
 		} else {

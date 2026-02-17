@@ -1,10 +1,8 @@
 package net.azureaaron.hmapi.data.error;
 
 import java.util.function.IntFunction;
-
+import net.minecraft.util.ByIdMap;
 import org.jetbrains.annotations.ApiStatus;
-
-import net.minecraft.util.function.ValueLists;
 
 /**
  * Error reasons native to the Mod API.
@@ -16,7 +14,7 @@ public enum ModApiErrorReason implements ErrorReason {
 	INVALID_PACKET_VERSION(4),
 	NO_LONGER_SUPPORTED(5);
 
-	private static final IntFunction<ModApiErrorReason> BY_ID = ValueLists.createIndexToValueFunction(ModApiErrorReason::id, ModApiErrorReason.values(), (ModApiErrorReason) null);
+	private static final IntFunction<ModApiErrorReason> BY_ID = ByIdMap.sparse(ModApiErrorReason::id, ModApiErrorReason.values(), (ModApiErrorReason) null);
 
 	private final int id;
 

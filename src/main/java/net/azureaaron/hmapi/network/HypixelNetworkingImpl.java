@@ -23,28 +23,28 @@ import net.azureaaron.hmapi.network.packet.v1.s2c.LocationUpdateS2CPacket;
 import net.azureaaron.hmapi.network.packet.v1.s2c.PlayerInfoS2CPacket;
 import net.azureaaron.hmapi.network.packet.v2.s2c.PartyInfoS2CPacket;
 import net.azureaaron.hmapi.utils.PacketSendResult;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.network.packet.c2s.common.CustomPayloadC2SPacket;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
 @ApiStatus.Internal
 public class HypixelNetworkingImpl {
 	private static final Logger LOGGER = LogUtils.getLogger();
-	private static final MinecraftClient CLIENT = MinecraftClient.getInstance();
+	private static final Minecraft CLIENT = Minecraft.getInstance();
 	private static final long COOLDOWN = 1000L;
-	private static final Object2LongMap<CustomPayload.Id<?>> COOLDOWNS = Object2LongMaps.synchronize(new Object2LongOpenHashMap<>());
+	private static final Object2LongMap<CustomPacketPayload.Type<?>> COOLDOWNS = Object2LongMaps.synchronize(new Object2LongOpenHashMap<>());
 
 	static <T extends HypixelC2SPacket> PacketSendResult sendPacket(T payload, boolean bypassCooldown) {
-		if ((System.currentTimeMillis() + COOLDOWN > COOLDOWNS.computeIfAbsent(payload.getId(), _id -> 0L)) || bypassCooldown) {
+		if ((System.currentTimeMillis() + COOLDOWN > COOLDOWNS.computeIfAbsent(payload.type(), _id -> 0L)) || bypassCooldown) {
 			//TODO log if its null with fatal
-			Objects.requireNonNull(CLIENT.getNetworkHandler(), "Cannot send packet while not in game!").sendPacket(new CustomPayloadC2SPacket(payload));
-			COOLDOWNS.put(payload.getId(), System.currentTimeMillis());
+			Objects.requireNonNull(CLIENT.getConnection(), "Cannot send packet while not in game!").send(new ServerboundCustomPayloadPacket(payload));
+			COOLDOWNS.put(payload.type(), System.currentTimeMillis());
 
 			return PacketSendResult.success();
 		}
 
-		return PacketSendResult.onCooldown(COOLDOWNS.getLong(payload.getId()) - System.currentTimeMillis());
+		return PacketSendResult.onCooldown(COOLDOWNS.getLong(payload.type()) - System.currentTimeMillis());
 	}
 
 	//TODO unify this and the logic in the non-impl class as its the same - rename to just sendEventRegistrations?

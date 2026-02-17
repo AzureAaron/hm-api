@@ -1,16 +1,15 @@
 package net.azureaaron.hmapi.network;
 
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
-
 @ApiStatus.Internal
-public record HijackedCustomPayload(CustomPayload original, CustomPayload hijacked) implements CustomPayload {
-	private static final CustomPayload.Id<HijackedCustomPayload> ID = new CustomPayload.Id<HijackedCustomPayload>(Identifier.of("hmapi", "hijacked"));
+public record HijackedCustomPayload(CustomPacketPayload original, CustomPacketPayload hijacked) implements CustomPacketPayload {
+	private static final CustomPacketPayload.Type<HijackedCustomPayload> ID = new CustomPacketPayload.Type<HijackedCustomPayload>(Identifier.fromNamespaceAndPath("hmapi", "hijacked"));
 
 	@Override
-	public Id<? extends CustomPayload> getId() {
+	public Type<? extends CustomPacketPayload> type() {
 		return ID;
 	}
 }

@@ -1,10 +1,8 @@
 package net.azureaaron.hmapi.data.rank;
 
 import java.util.function.IntFunction;
-
+import net.minecraft.util.ByIdMap;
 import org.jetbrains.annotations.ApiStatus;
-
-import net.minecraft.util.function.ValueLists;
 
 /**
  * Represents a paid rank.
@@ -17,7 +15,7 @@ public enum PackageRank implements RankType {
 	MVP_PLUS(5);
 
 	@ApiStatus.Internal
-	public static final IntFunction<PackageRank> BY_ID = ValueLists.createIndexToValueFunction(PackageRank::id, PackageRank.values(), PackageRank.NONE);
+	public static final IntFunction<PackageRank> BY_ID = ByIdMap.sparse(PackageRank::id, PackageRank.values(), PackageRank.NONE);
 
 	private final int id;
 
