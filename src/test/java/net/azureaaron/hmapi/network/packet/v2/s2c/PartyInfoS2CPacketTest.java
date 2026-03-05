@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import net.azureaaron.hmapi.data.party.PartyRole;
-import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
-import net.minecraft.server.Bootstrap;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.SharedConstants;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.util.Util;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 
 public class PartyInfoS2CPacketTest {
@@ -29,7 +29,7 @@ public class PartyInfoS2CPacketTest {
 
 	@Test
 	void testDeserializeByteBuf() {
-		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 		XoroshiroRandomSource rand = new XoroshiroRandomSource(0x88888888L);
 
 		Map<UUID, PartyRole> members = Util.make(new Object2ReferenceOpenHashMap<>(), map -> {

@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 import net.azureaaron.hmapi.data.rank.MonthlyPackageRank;
 import net.azureaaron.hmapi.data.rank.PackageRank;
 import net.azureaaron.hmapi.data.rank.PlayerRank;
-import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
-import net.minecraft.server.Bootstrap;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.SharedConstants;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.Bootstrap;
 
 public class PlayerInfoS2CPacketTest {
 
@@ -26,7 +26,7 @@ public class PlayerInfoS2CPacketTest {
 
 	@Test
 	void testDeserializeByteBuf() {
-		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
+		RegistryFriendlyByteBuf buf = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(PacketByteBufs.create());
 
 		buf.writeVarInt(1)
 		.writeVarInt(5)

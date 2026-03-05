@@ -12,15 +12,15 @@ import net.azureaaron.hmapi.network.HypixelNetworking;
 import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
 import net.azureaaron.hmapi.network.packet.v1.s2c.LocationUpdateS2CPacket;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommands;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Util;
 
 public class HMApi implements ClientModInitializer {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -46,21 +46,21 @@ public class HMApi implements ClientModInitializer {
 	}
 
 	private static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandBuildContext registryAccess) {
-		dispatcher.register(ClientCommands.literal("hmapi")
-				.then(ClientCommands.literal("sendPacket")
-						.then(ClientCommands.literal("partyInfo2")
+		dispatcher.register(ClientCommandManager.literal("hmapi")
+				.then(ClientCommandManager.literal("sendPacket")
+						.then(ClientCommandManager.literal("partyInfo2")
 								.executes(context -> {
 									HypixelNetworking.sendPartyInfoC2SPacket(2);
 
 									return Command.SINGLE_SUCCESS;
 								}))
-						.then(ClientCommands.literal("playerInfo")
+						.then(ClientCommandManager.literal("playerInfo")
 								.executes(context -> {
 									HypixelNetworking.sendPlayerInfoC2SPacket(1);
 
 									return Command.SINGLE_SUCCESS;
 								}))
-						.then(ClientCommands.literal("register4LocationUpdates")
+						.then(ClientCommandManager.literal("register4LocationUpdates")
 								.executes(context -> {
 									HypixelNetworking.registerToEvents(Util.make(new Object2IntOpenHashMap<>(), map -> {
 										map.put(LocationUpdateS2CPacket.ID, 1);
@@ -69,7 +69,7 @@ public class HMApi implements ClientModInitializer {
 									return Command.SINGLE_SUCCESS;
 								}))
 						)
-				.then(ClientCommands.literal("toggleSendPacketsInChat")
+				.then(ClientCommandManager.literal("toggleSendPacketsInChat")
 						.executes(context -> {
 							sendPacketsInChat = true;
 

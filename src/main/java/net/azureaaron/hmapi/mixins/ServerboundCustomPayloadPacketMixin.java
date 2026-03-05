@@ -12,8 +12,8 @@ import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-@Mixin(value = ServerboundCustomPayloadPacket.class, priority = 1888)
-public class CustomPayloadC2SPacketMixin {
+@Mixin(value = ServerboundCustomPayloadPacket.class, priority = 888)
+public class ServerboundCustomPayloadPacketMixin {
 
 	@ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;codec(Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload$FallbackProvider;Ljava/util/List;)Lnet/minecraft/network/codec/StreamCodec;"))
 	private static StreamCodec<FriendlyByteBuf, CustomPacketPayload> wrapC2SPacketCodec(StreamCodec<FriendlyByteBuf, CustomPacketPayload> original) {

@@ -4,9 +4,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 import org.spongepowered.asm.mixin.transformer.IMixinTransformer;
-
-import net.minecraft.server.Bootstrap;
 import net.minecraft.SharedConstants;
+import net.minecraft.server.Bootstrap;
 
 public class MixinsTest {
 

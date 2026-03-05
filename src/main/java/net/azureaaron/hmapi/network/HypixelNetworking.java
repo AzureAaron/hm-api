@@ -15,9 +15,9 @@ import net.azureaaron.hmapi.network.packet.s2c.HypixelS2CPacket;
 import net.azureaaron.hmapi.network.packet.v1.s2c.LocationUpdateS2CPacket;
 import net.azureaaron.hmapi.utils.PacketSendResult;
 import net.azureaaron.hmapi.utils.Utils;
-import net.minecraft.util.Util;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Util;
 
 /**
  * Public interface for interacting with the networking component (sending packets) of the Mod API.

@@ -3,9 +3,9 @@
 	"package": "net.azureaaron.hmapi.mixins",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ClientCommonNetworkHandlerMixin",
-		"CustomPayloadC2SPacketMixin",
-		"CustomPayloadS2CPacketMixin"
+		"ClientboundCustomPayloadPacketMixin",
+		"ClientCommonPacketListenerImplMixin",
+		"ServerboundCustomPayloadPacketMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

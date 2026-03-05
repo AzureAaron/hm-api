@@ -17,8 +17,8 @@ import net.minecraft.network.protocol.common.ClientCommonPacketListener;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-@Mixin(value = ClientboundCustomPayloadPacket.class, priority = 1888)
-public abstract class CustomPayloadS2CPacketMixin {
+@Mixin(value = ClientboundCustomPayloadPacket.class, priority = 888)
+public abstract class ClientboundCustomPayloadPacketMixin {
 	@Shadow
 	public abstract CustomPacketPayload payload();
 
