@@ -49,19 +49,19 @@ public class HMApi implements ClientModInitializer {
 		dispatcher.register(ClientCommands.literal("hmapi")
 				.then(ClientCommands.literal("sendPacket")
 						.then(ClientCommands.literal("partyInfo2")
-								.executes(context -> {
+								.executes(_ -> {
 									HypixelNetworking.sendPartyInfoC2SPacket(2);
 
 									return Command.SINGLE_SUCCESS;
 								}))
 						.then(ClientCommands.literal("playerInfo")
-								.executes(context -> {
+								.executes(_ -> {
 									HypixelNetworking.sendPlayerInfoC2SPacket(1);
 
 									return Command.SINGLE_SUCCESS;
 								}))
 						.then(ClientCommands.literal("register4LocationUpdates")
-								.executes(context -> {
+								.executes(_ -> {
 									HypixelNetworking.registerToEvents(Util.make(new Object2IntOpenHashMap<>(), map -> {
 										map.put(LocationUpdateS2CPacket.ID, 1);
 									}));
@@ -70,7 +70,7 @@ public class HMApi implements ClientModInitializer {
 								}))
 						)
 				.then(ClientCommands.literal("toggleSendPacketsInChat")
-						.executes(context -> {
+						.executes(_ -> {
 							sendPacketsInChat = true;
 
 							return Command.SINGLE_SUCCESS;

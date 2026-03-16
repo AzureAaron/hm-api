@@ -36,7 +36,7 @@ public class HypixelNetworkingImpl {
 	private static final Object2LongMap<CustomPacketPayload.Type<?>> COOLDOWNS = Object2LongMaps.synchronize(new Object2LongOpenHashMap<>());
 
 	static <T extends HypixelC2SPacket> PacketSendResult sendPacket(T payload, boolean bypassCooldown) {
-		if ((System.currentTimeMillis() + COOLDOWN > COOLDOWNS.computeIfAbsent(payload.type(), _id -> 0L)) || bypassCooldown) {
+		if ((System.currentTimeMillis() + COOLDOWN > COOLDOWNS.computeIfAbsent(payload.type(), _ -> 0L)) || bypassCooldown) {
 			//TODO log if its null with fatal
 			Objects.requireNonNull(CLIENT.getConnection(), "Cannot send packet while not in game!").send(new ServerboundCustomPayloadPacket(payload));
 			COOLDOWNS.put(payload.type(), System.currentTimeMillis());
@@ -70,10 +70,10 @@ public class HypixelNetworkingImpl {
 				case LocationUpdateS2CPacket packet -> HypixelPacketEvents.LOCATION_UPDATE.invoker().onPacket(packet);
 
 				//Error cases
-				case ErrorS2CPacket(var id, var err) when id.equals(PartyInfoS2CPacket.ID) -> HypixelPacketEvents.PARTY_INFO.invoker().onPacket(payload);
-				case ErrorS2CPacket(var id, var err) when id.equals(PlayerInfoS2CPacket.ID) -> HypixelPacketEvents.PLAYER_INFO.invoker().onPacket(payload);
-				case ErrorS2CPacket(var id, var err) when id.equals(HelloS2CPacket.ID) -> HypixelPacketEvents.HELLO.invoker().onPacket(payload);
-				case ErrorS2CPacket(var id, var err) when id.equals(LocationUpdateS2CPacket.ID) -> HypixelPacketEvents.LOCATION_UPDATE.invoker().onPacket(payload);
+				case ErrorS2CPacket(var id, _) when id.equals(PartyInfoS2CPacket.ID) -> HypixelPacketEvents.PARTY_INFO.invoker().onPacket(payload);
+				case ErrorS2CPacket(var id, _) when id.equals(PlayerInfoS2CPacket.ID) -> HypixelPacketEvents.PLAYER_INFO.invoker().onPacket(payload);
+				case ErrorS2CPacket(var id, _) when id.equals(HelloS2CPacket.ID) -> HypixelPacketEvents.HELLO.invoker().onPacket(payload);
+				case ErrorS2CPacket(var id, _) when id.equals(LocationUpdateS2CPacket.ID) -> HypixelPacketEvents.LOCATION_UPDATE.invoker().onPacket(payload);
 
 				//When the packet encountered was unknown, likely due to encountering an unimplemented version of a packet
 				case HypixelS2CPacket packet when packet == HypixelS2CPacket.NOP -> LOGGER.warn("[HM API] Recevied an unknown or unexpected packet!");

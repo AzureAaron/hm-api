@@ -26,13 +26,13 @@ public class Example {
 	 */
 	private static void handlePacket(HypixelS2CPacket packet) {
 		switch (packet) {
-			case LocationUpdateS2CPacket(var serverName, var serverType, var lobbyName, var mode, var map) -> {
+			case LocationUpdateS2CPacket(_, _, _, _, _) -> {
 				//Do something with the updated location data
 			}
 
 			//If you merge multiple handlers together, its recommended to add a guard case for the packet id, so that you can differentiate
 			//between the sources of errors
-			case ErrorS2CPacket(var id, var errorReason) -> {
+			case ErrorS2CPacket(_,  _) -> {
 				//Handle errors if you want
 			}
 
