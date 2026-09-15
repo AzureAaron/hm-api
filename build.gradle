@@ -85,7 +85,7 @@ publishing {
 	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
 		maven {
-			url = "https://maven.azureaaron.net/" + (System.getenv("HMAPI_RELEASE") != null ? "releases" : "snapshots");
+			url = "https://maven.azureaaron.net/releases";
 
 			credentials(PasswordCredentials) {
 				username = System.getenv("AARON_MAVEN_USER");

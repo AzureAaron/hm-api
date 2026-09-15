@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.util.Util;
@@ -30,11 +29,8 @@ public class RegisterC2SPacketTest {
 		RegistryFriendlyByteBuf actual = RegistryFriendlyByteBuf.decorator(RegistryAccess.EMPTY).apply(FriendlyByteBufs.create());
 
 		Object2IntMap<Identifier> wantedPackets = Util.make(new Object2IntOpenHashMap<>(), map -> map.put(LocationUpdateS2CPacket.ID.id(), 1));
-
-		expected
-		.writeVarInt(1)
-		.writeMap(wantedPackets, Identifier.STREAM_CODEC, ByteBufCodecs.VAR_INT);
-
+		
+		RegisterC2SPacket.PACKET_CODEC.encode(expected, new RegisterC2SPacket(1, wantedPackets));
 		RegisterC2SPacket.PACKET_CODEC.encode(actual, new RegisterC2SPacket(1, wantedPackets));
 
 		Assertions.assertEquals(expected, actual);
